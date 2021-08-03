@@ -1,0 +1,67 @@
+— title: ”econ 183” output: htmldocument : def aultpdfdocument : def ault −
+−−
+import labor data
+24
+“‘r setup, include=TRUE
+library(tinytex) library(dplyr) library(plyr) library(dbplyr)
+install.packages(’ipumsr’)
+library(ipumsr)
+getwd()
+ddi ¡- readipumsddi(”cps00005.xml”)
+data ¡- readipumsmicro(ddi)
+df = data[with(data, ((dataIND1990 >= 1)|(dataIND1990 ¿= 1))), ]
+group = ddply(df,.(YEAR, IND1990, UNION),nrow)
+group = group[groupUNION! = 2, ]
+group = group[groupUNION! = 3, ]
+percent = group
+percent = percent[percentY EAR! = 1995, ]
+percent = percent[percentY EAR! = 2000, ]
+percent = percent[percentY EAR! = 2004, ]
+percent = percent[percentY EAR! = 2015, ]
+percent = percent[percentY EAR! = 2020, ]
+Y1990 = percent[percentY EAR! = 2010, ]
+Y2010 = percent[percentY EAR! = 1990, ]
+decline ¡- merge(Y1990, Y2010, by=c(”IND1990”,”UNION”))
+decline ¡- transform(decline, changeshare = (share.y - share.x) / share.y)
+25
+decline ¡- transform(decline, changetotal = (V1.y - V1.x) / V1.y)
+decline = decline[declineV 1.x > 50, ]
+allunion = decline[declineUNION! = 0, ]
+nounion = decline[declineUNION! = 1, ]decline < −decline[−c(2 : 9)]“‘
+import penetration data
+“‘r
+library(tidyverse)
+library(haven)
+pen = readdta(choose.f iles())
+cross1 = readdta(choose.f iles())
+cross2 = readdta(choose.f iles())
+summary(pen)
+“‘
+“‘r
+install.packages(”crosswalkr”)
+library(crosswalkr)
+library(dplyr) library(labelled) library(haven)
+pen ¡- pen
+mer ¡- merge(cross1 ,pen ,by=”sic87”)
+mer ¡- mer
+penlabor ¡- merge(mer ,decline , by=”IND1990”)
+26
+allunion ¡- merge(mer ,allunion , by=”IND1990”)
+nounion ¡- merge(mer ,nounion , by=”IND1990”)
+alluniondimportusch19912011
+nona = na.omit(penlabor)
+scatter.smooth(x=nounionchangetotal, y = nouniondimportusch19912011)
+scatter.smooth(x=nouniondimportusch19912011, y = nounionchangetotal)
+cor(alluniondimportusch19912011, allunionchangetotal)
+summary(lm(changeshare dimportotch19912011, data = allunion))
+summary(lm(changetotal dimportotch19912011, data = nounion))
+summary(lm(changetotal dimportotch19912011, data = penlabor))
+ave = groupby(IND1990)
+summary(penlabor)
+“‘
+“‘r
+install.packages(”stargazer”)
+library(stargazer)
+attitudehigh.rating < −(attituderating ¿ 70)
+stargazer(lin, title=”Results”, align=TRUE)
+“‘
