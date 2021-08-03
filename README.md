@@ -1,1 +1,1 @@
-# The-E-ects-of-Trade-Exposure-on-Unionization-Rates
+# The-Effects-of-Trade-Exposure-on-Unionization-Rates
